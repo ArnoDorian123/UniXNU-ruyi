@@ -158,8 +158,8 @@ psci_method = "smc"
 # The ABL splash buffer is already described by the board device tree overlay:
 #   fragment@64/__overlay__/splash_region  label = "cont_splash_region"
 #   reg = <0x0 0xFC400000 0x0 0x2B00000>          (0xFC400000, 45 MiB)
-# so the bootloader does find it and does not power the display down. Do NOT inject another
-# /reserved-memory/splash_region node: fdtput fails with FDT_ERR_EXISTS.
+# so the bootloader does find it and does not power the display down. Do NOT inject that node
+# again: fdtput fails with FDT_ERR_EXISTS.
 #
 # What is missing is the region name SimpleFbDxe looks up. It calls
 #   LocateMemoryRegionByName ("Display Reserved")
