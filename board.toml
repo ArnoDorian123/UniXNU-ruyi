@@ -91,19 +91,22 @@ roots = [
 ]
 
 [firmware]
-# uefi-ruyi is a fork of UniXNU/uefi-sheng (Mu-Silicium + the Xiaomi platform packages).
-# ruyiPkg is a copy of shengPkg with the LanaiPkg SoC include and ruyi PCDs.
+# uefi-ruyi must be a fork of UniXNU/uefi-sheng (branch sheng): its Binaries submodule
+# (Project-Silicium/Device-Binaries) supplies Binaries/sheng, which the included FDF fragments
+# reference, and its Silicium tree declares the frame buffer PCDs used below.
+#
+# ruyi.dsc and ruyi.fdf live inside Platforms/Xiaomi/shengPkg, not in a renamed copy: the
+# Include/*.inc fragments hardcode shengPkg/... INF paths, so keeping the directory name keeps
+# them valid. Only the platform identity and the SoC include differ from sheng.
 config = "ruyi"
-dsc = "Platforms/Xiaomi/ruyiPkg/ruyi.dsc"
+dsc = "Platforms/Xiaomi/shengPkg/ruyi.dsc"
 fd = "Build/ruyiPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
 # No preflight script yet: a missing one aborts the firmware step. Add scripts/check-ruyi.py
 # to the device repository first if vendor inputs ever need validation.
 preflight = []
 submodules = ["Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
-# uefi-ruyi is a fork of Project-Silicium/Mu-Silicium; its Resources/MuPatches has
-# AsmMacroLib, Auth-Service, Boot-Manager, Timer and Usb-Bus, but not Gic-Spurious.patch.
-# sheng applies that patch; ruyi starts without it and adds it only if the GIC misbehaves.
-patches = []
+# uefi-sheng carries this patch; it suppresses a spurious GIC interrupt that can stall DXE.
+patches = ["Resources/MuPatches/Gic-Spurious.patch"]
 packages = [
   "{uefi}",
   "{uefi}/Platforms/Xiaomi",
