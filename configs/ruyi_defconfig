@@ -10,8 +10,11 @@ CONFIG_XNU_NATIVE_UFS=y
 CONFIG_XNU_NATIVE_CS_HASH_CACHE=y
 CONFIG_XNU_NATIVE_ARCH_TIMER=y
 CONFIG_XNU_TRUST_CACHE_RUNTIME=y
-# Mandatory: the patched bsd_init calls native_legacy_display_probe() unconditionally.
-CONFIG_XNU_NATIVE_LEGACY_DISPLAY=y
+
+# The patched bsd_init calls native_legacy_display_probe/late_probe unconditionally.
+# ruyi has no legacy display driver yet, so link the stub archive built by
+# scripts/build-ruyi-display-stubs.py.
+CONFIG_XNU_EXTRA_LD_ARCHIVES="{tree}/build/ruyi-display-stubs/libRuyiDisplayStubs.a"
 
 # The kernel is prelinked against the original Apple kernelcache, so crypto comes from there.
 CONFIG_XNU_CRYPTO_BOOTSTRAP="prelinked"
