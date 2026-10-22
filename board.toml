@@ -104,7 +104,10 @@ fd = "Build/ruyiPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
 # No preflight script yet: a missing one aborts the firmware step. Add scripts/check-ruyi.py
 # to the device repository first if vendor inputs ever need validation.
 preflight = []
-submodules = ["Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
+# Binaries is required: shengPkg/Include/APRIORI.inc lists
+#   INF Binaries/sheng/MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
+# unconditionally, and Binaries is a submodule (Project-Silicium/Device-Binaries).
+submodules = ["Binaries", "Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
 # uefi-sheng carries this patch; it suppresses a spurious GIC interrupt that can stall DXE.
 patches = ["Resources/MuPatches/Gic-Spurious.patch"]
 packages = [
