@@ -37,14 +37,15 @@ windows = [
 [kernel]
 defconfig = "ruyi_defconfig"
 # build-arm-driver.py exists only in device repositories, not in UniXNU/scripts.
-# build-ruyi-display-stubs.py replaces sheng's build-native-legacy-display.py, which needs
-# sheng audit data and fails on ruyi ("No reference candidate available").
+# build-ruyi-display-stubs.py satisfies the XNU_NATIVE_LEGACY_DISPLAY=1 link contract without
+# sheng's audit data (it writes build/native-legacy-display/libNativeLegacyDisplay.late.a).
+# NativeUfs is postponed to M3: it references boot-progress, verified-root and IOStorageFamily
+# symbols that only the full sheng feature stack links.
 archives = [
   "build-corecrypto-14.py",
   "build-corecrypto-14.py --namespace",
   "build-arm-driver.py ArmDTPlatform",
   "build-arm-driver.py ArmCpu",
-  "build-arm-driver.py NativeUfs",
   "build-ruyi-display-stubs.py",
   "build-libpthread-kernel.py",
 ]
