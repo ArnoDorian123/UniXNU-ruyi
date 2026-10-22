@@ -100,7 +100,10 @@ fd = "Build/ruyiPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
 # to the device repository first if vendor inputs ever need validation.
 preflight = []
 submodules = ["Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
-patches = ["Resources/MuPatches/Gic-Spurious.patch"]
+# uefi-ruyi is a fork of Project-Silicium/Mu-Silicium; its Resources/MuPatches has
+# AsmMacroLib, Auth-Service, Boot-Manager, Timer and Usb-Bus, but not Gic-Spurious.patch.
+# sheng applies that patch; ruyi starts without it and adds it only if the GIC misbehaves.
+patches = []
 packages = [
   "{uefi}",
   "{uefi}/Platforms/Xiaomi",
