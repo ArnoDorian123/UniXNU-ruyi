@@ -36,16 +36,16 @@ windows = [
 
 [kernel]
 defconfig = "ruyi_defconfig"
-# build-arm-driver.py and build-native-legacy-display.py are device-repository scripts; they do
-# not exist in UniXNU/scripts. build-native-legacy-display is mandatory: the patched bsd_init
-# references _native_legacy_display_probe unconditionally.
+# build-arm-driver.py exists only in device repositories, not in UniXNU/scripts.
+# build-ruyi-display-stubs.py replaces sheng's build-native-legacy-display.py, which needs
+# sheng audit data and fails on ruyi ("No reference candidate available").
 archives = [
   "build-corecrypto-14.py",
   "build-corecrypto-14.py --namespace",
   "build-arm-driver.py ArmDTPlatform",
   "build-arm-driver.py ArmCpu",
   "build-arm-driver.py NativeUfs",
-  "build-native-legacy-display.py",
+  "build-ruyi-display-stubs.py",
   "build-libpthread-kernel.py",
 ]
 
