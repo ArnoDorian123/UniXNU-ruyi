@@ -1,0 +1,27 @@
+# Kernel configuration of the ruyi image. CONFIG_XNU_<NAME> becomes XNU_<NAME> for the kernel build.
+# Start from the smallest set that the SM8650 giulia port proved; enable drivers as they land.
+
+CONFIG_XNU_BUILD_ARCHIVES=y
+CONFIG_XNU_SOURCE_CORECRYPTO14=y
+CONFIG_XNU_SOURCE_PTHREAD=y
+CONFIG_XNU_ARM_DT_PLATFORM=y
+CONFIG_XNU_ARMCPU=y
+CONFIG_XNU_NATIVE_UFS=y
+CONFIG_XNU_NATIVE_CS_HASH_CACHE=y
+CONFIG_XNU_NATIVE_ARCH_TIMER=y
+CONFIG_XNU_TRUST_CACHE_RUNTIME=y
+# Mandatory: the patched bsd_init calls native_legacy_display_probe() unconditionally.
+CONFIG_XNU_NATIVE_LEGACY_DISPLAY=y
+
+# The kernel is prelinked against the original Apple kernelcache, so crypto comes from there.
+CONFIG_XNU_CRYPTO_BOOTSTRAP="prelinked"
+
+# Not applicable to ruyi (kept explicit so a later merge does not inherit them silently).
+CONFIG_XNU_ARMVIRT_PLATFORM=n
+CONFIG_XNU_NATIVE_VIRTIO_BLOCK=n
+CONFIG_XNU_NATIVE_RAM_BLOCK=n
+
+# TODO: fill these when the owner volumes are built.
+# CONFIG_XNU_OWNER_ROOT_TRUST=y
+# CONFIG_XNU_OWNER_DATA_MOUNT=y
+# CONFIG_XNU_OWNER_DATA_VOLUME_UUID="00000000-0000-0000-0000-000000000000"
