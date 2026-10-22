@@ -1,23 +1,26 @@
 # Kernel configuration of the ruyi image. CONFIG_XNU_<NAME> becomes XNU_<NAME> for the kernel build.
-# Start from the smallest set that the SM8650 giulia port proved; enable drivers as they land.
+# M0 goal: link a complete kernel.macho. Drivers are added back stage by stage.
 
 CONFIG_XNU_BUILD_ARCHIVES=y
 CONFIG_XNU_SOURCE_CORECRYPTO14=y
 CONFIG_XNU_SOURCE_PTHREAD=y
 CONFIG_XNU_ARM_DT_PLATFORM=y
 CONFIG_XNU_ARMCPU=y
-CONFIG_XNU_NATIVE_UFS=y
 CONFIG_XNU_NATIVE_CS_HASH_CACHE=y
 CONFIG_XNU_NATIVE_ARCH_TIMER=y
 CONFIG_XNU_TRUST_CACHE_RUNTIME=y
 
-# The patched bsd_init calls native_legacy_display_probe/late_probe unconditionally.
-# ruyi has no legacy display driver yet, so link the stub archive built by
-# scripts/build-ruyi-display-stubs.py.
-CONFIG_XNU_EXTRA_LD_ARCHIVES="{tree}/build/ruyi-display-stubs/libRuyiDisplayStubs.a"
+# Makes build-xnu-4k-baseline.sh -force_load build/native-legacy-display/libNativeLegacyDisplay.late.a,
+# which scripts/build-ruyi-display-stubs.py produces. The stub answers "no legacy display", so the
+# boot stays on the DarwinBoot framebuffer.
+CONFIG_XNU_NATIVE_LEGACY_DISPLAY=y
 
 # The kernel is prelinked against the original Apple kernelcache, so crypto comes from there.
 CONFIG_XNU_CRYPTO_BOOTSTRAP="prelinked"
+
+# Postponed to M3: NativeUfs references boot-progress, verified-root and IOStorageFamily
+# symbols that are only linked by the full sheng feature stack.
+CONFIG_XNU_NATIVE_UFS=n
 
 # Not applicable to ruyi (kept explicit so a later merge does not inherit them silently).
 CONFIG_XNU_ARMVIRT_PLATFORM=n
