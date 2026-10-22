@@ -155,29 +155,19 @@ owned_memory_size = "0x10000000"
 cpu_regs = "0"
 psci_method = "smc"
 
-# The stock ABL looks for /reserved-memory/splash_region. Its own strings say:
-#   "Splash region not found in device tree, powering down the display and controller"
-# so without this node the display is switched off before the firmware ever runs.
+# The ABL splash buffer is already described by the board device tree overlay:
+#   fragment@64/__overlay__/splash_region  label = "cont_splash_region"
+#   reg = <0x0 0xFC400000 0x0 0x2B00000>          (0xFC400000, 45 MiB)
+# so the bootloader does find it and does not power the display down. Do NOT inject another
+# /reserved-memory/splash_region node: fdtput fails with FDT_ERR_EXISTS.
 #
-# The ruyi device tree has no such node (non_secure_display_region has reg = <0 0 0 0>, it is
-# allocated at runtime), hence the node is injected here.
-#
-# 0xB0000000 sits in the free window between adspslpi_region (ends 0xA2580000) and
-# tz_merged_region (0xD8000000). 0x2000000 (32 MiB) covers both panels:
-#   1224 * 2912 * 4 = 14.2 MiB, 1392 * 1208 * 4 = 6.4 MiB
-#
-# A second node carries the label SimpleFbDxe looks up ("Display Reserved"); without it the
-# GOP driver returns EFI_NOT_FOUND and nothing is ever drawn.
-[[bootimg.dtb_node]]
-path = "/reserved-memory/splash_region"
-props = [
-  { name = "label", type = "s", value = "cont_splash_region" },
-  { name = "reg", type = "x", value = ["0x0", "0xB0000000", "0x0", "0x2000000"] },
-]
-
+# What is missing is the region name SimpleFbDxe looks up. It calls
+#   LocateMemoryRegionByName ("Display Reserved")
+# and returns EFI_NOT_FOUND when the name is absent, so no GOP is ever installed and nothing is
+# drawn on any panel. Point that node at the very buffer ABL is already scanning out.
 [[bootimg.dtb_node]]
 path = "/reserved-memory/display_reserved"
 props = [
   { name = "label", type = "s", value = "Display Reserved" },
-  { name = "reg", type = "x", value = ["0x0", "0xB0000000", "0x0", "0x2000000"] },
+  { name = "reg", type = "x", value = ["0x0", "0xFC400000", "0x0", "0x2B00000"] },
 ]
