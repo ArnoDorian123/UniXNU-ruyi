@@ -91,12 +91,14 @@ roots = [
 ]
 
 [firmware]
-# TODO: the Mu-Silicium port does not exist yet. Until uefi-ruyi exists this block only
-# documents the intended layout; `unixnu build firmware` will fail on the missing DSC.
+# uefi-ruyi is a fork of UniXNU/uefi-sheng (Mu-Silicium + the Xiaomi platform packages).
+# ruyiPkg is a copy of shengPkg with the LanaiPkg SoC include and ruyi PCDs.
 config = "ruyi"
 dsc = "Platforms/Xiaomi/ruyiPkg/ruyi.dsc"
 fd = "Build/ruyiPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
-preflight = ["scripts/check-ruyi.py"]
+# No preflight script yet: a missing one aborts the firmware step. Add scripts/check-ruyi.py
+# to the device repository first if vendor inputs ever need validation.
+preflight = []
 submodules = ["Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
 patches = ["Resources/MuPatches/Gic-Spurious.patch"]
 packages = [
