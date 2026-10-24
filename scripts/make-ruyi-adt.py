@@ -117,10 +117,11 @@ def main():
         parser.error('--unique-chip-id must fit 8 bytes and --chip-id 4 bytes, both nonzero')
 
     #
-    # The board file still carries a 256 MiB placeholder; anything that small cannot describe
-    # this phone, so treat it as unset.
+    # The kernel only owns the contiguous window DarwinBoot maps for it, so the tree must not
+    # claim more memory than that: arm_vm_init walks dram-size and faults on everything else.
     #
-    dram_size = args.dram_size if args.dram_size > 0x10000000 else IDENTITY_DRAM_SIZE
+    window = args.owned_memory_size or 0x10000000
+    dram_size = window
 
     if args.owned_memory_size is not None and (
             not 0x10000000 <= args.owned_memory_size <= 0x200000000
@@ -131,8 +132,6 @@ def main():
         cpu_regs = [int(value, 0) for value in args.cpu_regs.split(',')]
     except ValueError:
         parser.error('--cpu-regs must be integers')
-    if cpu_regs == [0]:
-        cpu_regs = list(IDENTITY_CPU_REGS)
     if (not cpu_regs or cpu_regs[0] != 0 or len(set(cpu_regs)) != len(cpu_regs) or len(cpu_regs) > 8
             or any(reg < 0 or reg > 0xffff or reg & 0xff for reg in cpu_regs)):
         parser.error('--cpu-regs: up to eight distinct Affinity1-numbered cores, boot CPU 0 first')
