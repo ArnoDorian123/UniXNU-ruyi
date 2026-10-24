@@ -2,6 +2,7 @@
 # M0 goal: link a complete kernel.macho. Drivers are added back stage by stage.
 
 CONFIG_XNU_BUILD_ARCHIVES=y
+CONFIG_XNU_BOOT_PROGRESS=y
 CONFIG_XNU_SOURCE_CORECRYPTO14=y
 CONFIG_XNU_SOURCE_PTHREAD=y
 CONFIG_XNU_ARM_DT_PLATFORM=y
