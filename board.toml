@@ -48,6 +48,7 @@ archives = [
   "build-arm-driver.py ArmCpu",
   "build-ruyi-display-stubs.py",
   "build-libpthread-kernel.py",
+  "build-boot-progress.py",
 ]
 
 [kernel.prelink]
