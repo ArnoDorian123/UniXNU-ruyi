@@ -151,7 +151,7 @@ kernel_args = [
 [payload.adt]
 tool = "scripts/make-ruyi-adt.py"
 chip_id = "0"
-owned_memory_size = "0x10000000"
+owned_memory_size = "0x80000000"
 cpu_regs = "0"
 psci_method = "smc"
 
