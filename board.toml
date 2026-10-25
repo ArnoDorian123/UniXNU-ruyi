@@ -141,6 +141,8 @@ title = "Boot"
 dram_size = "0x10000000"
 panic_screen = true
 timeout = 3
+tools = true
+entry_probe_reset_delay = 6
 kernel_args = [
   "-v",
   "serial=3",
