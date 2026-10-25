@@ -142,7 +142,7 @@ dram_size = "0x10000000"
 panic_screen = false
 timeout = 3
 tools = true
-entry_probe_reset_after = "bsd_init"
+entry_probe_reset_after = "_bsd_init"
 entry_probe_reset_delay = 6
 kernel_args = [
   "-v",
