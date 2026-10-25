@@ -139,7 +139,7 @@ loader = "firmware"
 title = "Boot"
 # The DarwinBoot handoff window used by the giulia port. Not the installed 12 GB.
 dram_size = "0x10000000"
-panic_screen = true
+panic_screen = false
 timeout = 3
 tools = true
 entry_probe_reset_delay = 6
